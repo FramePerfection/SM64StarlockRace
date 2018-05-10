@@ -1,0 +1,14 @@
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\bin\Debug\SM64LockoutRace.exe
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\bin\Debug\SM64LockoutRace.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.Main.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.Properties.Resources.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.csproj.GenerateResource.Cache
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.exe
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.NetworkDialog.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.RulesDialog.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.csprojResolveAssemblyReference.cache
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\bin\Debug\SM64AppBase.dll
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\bin\Debug\SM64AppBase.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.exe
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.pdb

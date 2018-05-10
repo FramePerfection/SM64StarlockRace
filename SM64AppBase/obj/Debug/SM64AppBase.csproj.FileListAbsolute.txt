@@ -1,0 +1,5 @@
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64AppBase\bin\Debug\SM64AppBase.dll
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64AppBase\bin\Debug\SM64AppBase.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64AppBase\obj\Debug\SM64AppBase.dll
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64AppBase\obj\Debug\SM64AppBase.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64AppBase\obj\Debug\SM64AppBase.csprojResolveAssemblyReference.cache

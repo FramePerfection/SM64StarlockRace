@@ -1,0 +1,10 @@
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64DeathCounter\obj\x86\Debug\SM64DeathCounter.Main.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64DeathCounter\obj\x86\Debug\SM64DeathCounter.Properties.Resources.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64DeathCounter\obj\x86\Debug\SM64DeathCounter.csproj.GenerateResource.Cache
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64DeathCounter\bin\Debug\SM64DeathCounter.exe
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64DeathCounter\bin\Debug\SM64DeathCounter.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64DeathCounter\obj\x86\Debug\SM64DeathCounter.exe
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64DeathCounter\obj\x86\Debug\SM64DeathCounter.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64DeathCounter\bin\Debug\SM64AppBase.dll
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64DeathCounter\bin\Debug\SM64AppBase.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64DeathCounter\obj\x86\Debug\SM64DeathCounter.csprojResolveAssemblyReference.cache

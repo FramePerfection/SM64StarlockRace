@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+
+namespace SM64LockoutRace
+{
+    public partial class NetworkDialog : Form
+    {
+        public string Host = "localhost";
+        public int Port;
+
+        public NetworkDialog()
+        {
+            InitializeComponent();
+        }
+
+        private void txtServer_TextChanged(object sender, EventArgs e)
+        {
+            if (txtServer.Text == "")
+                Host = "localhost";
+            else
+                Host = txtServer.Text;
+        }
+
+        private void txtPort_TextChanged(object sender, EventArgs e)
+        {
+            btnOK.Enabled = int.TryParse(txtPort.Text, out Port);
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            DialogResult = System.Windows.Forms.DialogResult.OK;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = System.Windows.Forms.DialogResult.Cancel;
+        }
+    }
+}
