@@ -8,7 +8,7 @@
     <ProjectGuid>{9762DD0B-541D-4EFF-B4CB-06B6D0F9564B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SM64LockoutRace</RootNamespace>
+    <RootNamespace>GameServerUI</RootNamespace>
     <AssemblyName>SM64LockoutRace</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -42,6 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game.cs" />
+    <Compile Include="GameSelectDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameSelectDialog.Designer.cs">
+      <DependentUpon>GameSelectDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="LayoutDescription.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -64,6 +70,9 @@
     <Compile Include="RulesDialog.Designer.cs">
       <DependentUpon>RulesDialog.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="GameSelectDialog.resx">
+      <DependentUpon>GameSelectDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -104,6 +113,10 @@
     <None Include="star Lockout.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ServerBackend\ServerBackend.csproj">
+      <Project>{DAE2D991-891E-499C-9DC5-DBAD3095DFEC}</Project>
+      <Name>ServerBackend</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SM64AppBase\SM64AppBase.csproj">
       <Project>{1BD2780F-9192-4B39-9D62-B6746C60C0B9}</Project>
       <Name>SM64AppBase</Name>

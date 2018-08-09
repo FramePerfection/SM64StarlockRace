@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SM64LockoutRace
+namespace GameServerUI
 {
     public partial class RulesDialog : Form
     {

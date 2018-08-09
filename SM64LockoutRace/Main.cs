@@ -11,8 +11,9 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.IO;
 using SM64AppBase;
+using ServerBackend;
 
-namespace SM64LockoutRace
+namespace GameServerUI
 {
     public partial class Main : Form
     {
@@ -20,7 +21,7 @@ namespace SM64LockoutRace
         private BufferedGraphics gfx;
         public Graphics graphics;
         public float maxFPS = 60;
-        public Game Game;
+        public Game game;
         private float ratio = 1;
         private int difWidth, difHeight;
         private int initial_Width, initial_Height;
@@ -42,7 +43,7 @@ namespace SM64LockoutRace
             graphics = gfx.Graphics;
 
             OpenFileDialog ofd = new OpenFileDialog();
-            Game = new Game();
+            game = new Game();
         }
 
         protected override void WndProc(ref Message m)
@@ -67,8 +68,8 @@ namespace SM64LockoutRace
                 Marshal.StructureToPtr(rc, m.LParam, false);
                 m.Result = (IntPtr)1;
 
-                Game.scale_x = ((float)pnGraphics.Width / (initial_Width - difWidth));
-                Game.scale_y = Game.scale_x;
+                game.scale_x = ((float)pnGraphics.Width / (initial_Width - difWidth));
+                game.scale_y = game.scale_x;
                 onDraw();
                 return;
             }
@@ -117,34 +118,34 @@ namespace SM64LockoutRace
         {
             gfx.Render();
             graphics.Clear(Color.Black);
-            Game.draw(graphics);
+            game.draw(graphics);
         }
 
         private void onVisualUpdate(float fTime)
         {
-            Game.visualUpdate(fTime);
+            game.visualUpdate(fTime);
         }
 
         private void onUpdate()
         {
             UpdateProcess(null, null);
-            Game.update();
+            game.update();
             SuspendLayout();
-            btnStart.Enabled = (Game.NetworkClient != null && (Game.Mode == 1 || Game.NetworkClient.numClients() > 1) && !Game.started);
-            if (Game.NetworkClient == null)
+            btnStart.Enabled = (game.networkClient != null && (game.mode == 1 || game.networkClient.connectedClients > 1) && !game.started);
+            if (game.networkClient == null)
             {
                 btnHost.Text = "Host";
                 btnConnect.Text = "Connect";
                 btnHost.Enabled = true;
                 btnConnect.Enabled = true;
             }
-            foreach (ProcessEntry p in Game.memory.availableProcesses)
+            foreach (ProcessEntry p in game.memory.availableProcesses)
                 if (!cmbProcess.Items.Contains(p))
                     cmbProcess.Items.Add(p);
 
             Stack<ProcessEntry> removeStack = new Stack<ProcessEntry>();
             foreach (ProcessEntry p in cmbProcess.Items)
-                if (!Game.memory.availableProcesses.Contains(p))
+                if (!game.memory.availableProcesses.Contains(p))
                 {
                     if (p.pID == ((ProcessEntry)cmbProcess.SelectedItem).pID)
                         cmbProcess.SelectedItem = null;
@@ -160,22 +161,23 @@ namespace SM64LockoutRace
 
         private void btnHost_Click(object sender, EventArgs e)
         {
-            NetworkDialog dlg = new NetworkDialog();
-            dlg.txtServer.Enabled = false;
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                Game.NetworkClient = new NetworkClient(dlg.Port);
-                if (Game.NetworkClient.ErrorText != "")
-                {
-                    MessageBox.Show(Game.NetworkClient.ErrorText, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Game.NetworkClient = null;
-                    return;
-                }
-                Game.connect();
-                btnHost.Enabled = false;
-                btnHost.Text = "Hosting";
-                btnConnect.Enabled = false;
-            }
+            //NetworkDialog dlg = new NetworkDialog();
+            //dlg.txtServer.Text = "localhost";
+            ////dlg.txtServer.Enabled = false;
+            //if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    Game.NetworkClient = new NetworkClient(dlg.Port);
+            //    if (Game.NetworkClient.ErrorText != "")
+            //    {
+            //        MessageBox.Show(Game.NetworkClient.ErrorText, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        Game.NetworkClient = null;
+            //        return;
+            //    }
+            //    Game.connect();
+            //    btnHost.Enabled = false;
+            //    btnHost.Text = "Hosting";
+            //    btnConnect.Enabled = false;
+            //}
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -183,18 +185,27 @@ namespace SM64LockoutRace
             NetworkDialog dlg = new NetworkDialog();
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                Game.NetworkClient = new NetworkClient(dlg.Host, dlg.Port);
-                if (Game.NetworkClient.ErrorText != "")
+                game.networkClient = new NetworkClient(dlg.Host, dlg.Port);
+                if (game.networkClient.ErrorText != "")
                 {
-                    MessageBox.Show(Game.NetworkClient.ErrorText, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Game.NetworkClient = null;
+                    MessageBox.Show(game.networkClient.ErrorText, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    game.networkClient = null;
                     return;
                 }
-                Game.connect();
+                TopMost = false;
+                GameSelectDialog selectDlg = new GameSelectDialog(game);
+                if (selectDlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                {
+                    game.networkClient.Disconnect();
+                    TopMost = true;
+                    return;
+                }
+                game.Connect();
                 btnHost.Enabled = false;
                 btnConnect.Enabled = false;
                 btnStart.Enabled = true;
                 btnConnect.Text = "Connected";
+                TopMost = true;
             }
         }
 
@@ -203,10 +214,10 @@ namespace SM64LockoutRace
             RulesDialog dlg = new RulesDialog();
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                Game.rules.sync_Keys = dlg.chkKeys.Checked;
-                Game.rules.sync_Switches = dlg.chkSwitches.Checked;
-                Game.rules.sync_Cannons = dlg.chkCannons.Checked;
-                Game.reset();
+                game.rules.sync_Keys = dlg.chkKeys.Checked;
+                game.rules.sync_Switches = dlg.chkSwitches.Checked;
+                game.rules.sync_Cannons = dlg.chkCannons.Checked;
+                game.reset();
             }
         }
 
@@ -214,13 +225,13 @@ namespace SM64LockoutRace
         {
             if (cmbProcess.SelectedItem == null)
             {
-                Game.memory.SetProcess(null);
+                game.memory.SetProcess(null);
                 return;
             }
             try
             {
                 Process p = Process.GetProcessById(((ProcessEntry)cmbProcess.SelectedItem).pID);
-                Game.memory.SetProcess(p);
+                game.memory.SetProcess(p);
             }
             catch { }
         }
@@ -242,7 +253,7 @@ namespace SM64LockoutRace
             ofd.Filter = "Unified SM64 Star Layout Files|*.smlx";
             ofd.InitialDirectory = Application.StartupPath;
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                Game.layoutDescription = StarDisplay.LayoutDescription.DeserializeExternal(System.IO.File.ReadAllBytes(ofd.FileName), null);
+                game.layoutDescription = StarDisplay.LayoutDescription.DeserializeExternal(System.IO.File.ReadAllBytes(ofd.FileName), null);
         }
     }
 }

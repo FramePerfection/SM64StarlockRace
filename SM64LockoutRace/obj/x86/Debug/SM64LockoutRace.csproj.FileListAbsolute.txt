@@ -12,3 +12,16 @@ C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64Lo
 C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\igay2\SM64LockoutRace\bin\Debug\SM64AppBase.pdb
 C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.exe
 C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\bin\Debug\SM64LockoutRace.exe
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\bin\Debug\SM64LockoutRace.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\bin\Debug\SM64AppBase.dll
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\bin\Debug\SM64AppBase.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.csprojResolveAssemblyReference.cache
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\obj\x86\Debug\SM64LockoutRace.csproj.GenerateResource.Cache
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\obj\x86\Debug\GameServerUI.Main.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\obj\x86\Debug\GameServerUI.NetworkDialog.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\obj\x86\Debug\GameServerUI.Properties.Resources.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\obj\x86\Debug\GameServerUI.RulesDialog.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\bin\Debug\ServerBackend.dll
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\bin\Debug\ServerBackend.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\SM64LockoutRace\obj\x86\Debug\GameServerUI.GameSelectDialog.resources

@@ -1,0 +1,10 @@
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\obj\x86\Debug\GameServerUI.Main.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\obj\x86\Debug\GameServerUI.Properties.Resources.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\obj\x86\Debug\GameServer.csproj.GenerateResource.Cache
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\bin\Debug\GameServerUI.exe
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\bin\Debug\GameServerUI.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\bin\Debug\ServerBackend.dll
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\bin\Debug\ServerBackend.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\obj\x86\Debug\GameServerUI.exe
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\obj\x86\Debug\GameServerUI.pdb
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\obj\x86\Debug\GameServerUI.NetworkDialog.resources

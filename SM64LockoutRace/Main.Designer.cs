@@ -1,4 +1,4 @@
-﻿namespace SM64LockoutRace
+﻿namespace GameServerUI
 {
     partial class Main
     {

@@ -7,8 +7,9 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using StarDisplay;
 using SM64AppBase;
+using ServerBackend;
 
-namespace SM64LockoutRace
+namespace GameServerUI
 {
     public class Game
     {
@@ -27,14 +28,21 @@ namespace SM64LockoutRace
             public RectangleF rect;
             public Image image;
         }
+        const int 
+            ADDR_SAVEFILE = 0x32DDF6,
+            ADDR_LEVELID = 0x33BAC4,
+            ADDR_FIRSTFILE = 0x207690,
+            ADDR_GEOLAYOUTOFFSET = 0x32DDC4,
+            ADDR_BANKOFFSETS = 0x33B400;
+
         public starAnimation[] animations = new starAnimation[0x20 * 7];
 
         public static string[] specialNames = new string[] { "B1", "B2", "B3", "MC", "WC", "VC", "Sl", "OW", "S1", "S2", "S3" };
         //private static int[] specialIndex = new int[] { 0x1B, 0x1C, 0x1D, 0x21, 0x20, 0x22, 0x1E, 0x8, 0x1F, 0x23, 0x24 };
         public LayoutDescription layoutDescription = LayoutDescription.GenerateDefault();
 
-        public int Mode = 0;
-        public NetworkClient NetworkClient;
+        public int mode = 0;
+        public NetworkClient networkClient;
         public MemorySync memory;
         public byte[] stars = new byte[0x70];
         public byte[] myStars = new byte[0x70];
@@ -59,22 +67,25 @@ namespace SM64LockoutRace
             imgStarSlot = Properties.Resources.star_slot;
         }
 
-        public void connect()
+        public void Connect()
         {
-            if (NetworkClient == null) return;
-            NetworkClient.SetMessageListener((byte)1, synchronizeGame);
-            NetworkClient.SetMessageListener((byte)2, synchronizeGameStart);
-            NetworkClient.SetMessageListener((byte)3, resetInternal);
-            NetworkClient.WelcomeMessage = synchronizeGameStart;
-            NetworkClient.GetWelcomeBuffer = () => { return stars; };
+            if (networkClient == null) return;
+            networkClient.SetServerCallback((byte)2, synchronizeGame);
+            networkClient.SetServerCallback((byte)3, synchronizeGameStart);
+            networkClient.SetServerCallback((byte)4, resetInternal);
+            networkClient.SetClientCallback((byte)2, synchronizeGame);
+            networkClient.SetClientCallback((byte)3, synchronizeGameStart);
+            networkClient.SetClientCallback((byte)4, resetInternal);
+            //NetworkClient.WelcomeMessage = synchronizeGameStart;
+            //NetworkClient.GetWelcomeBuffer = () => { return stars; };
         }
 
         bool validateState()
         {
-            short chkValue = (short)BitConverter.ToInt16(memory.ReadMemory(0x207690 + 0x36 + saveFile * 0x70, 2), 0);
+            short chkValue = (short)BitConverter.ToInt16(memory.ReadMemory(ADDR_FIRSTFILE+ 0x36 + saveFile * 0x70, 2), 0);
             if (chkValue != 0x4441)
                 return false;
-            short levelID = (short)(BitConverter.ToInt16(memory.ReadMemory(0x33BAC4, 2), 0) - 1);
+            short levelID = (short)(BitConverter.ToInt16(memory.ReadMemory(ADDR_LEVELID , 2), 0) - 1);
             int levelIndex = (levelID >= 0 ? (levelID >> 2 << 2) + 3 - levelID % 4 : -1);
             if (levelIndex + 0xC > stars.Length) return false;
             return true;
@@ -82,14 +93,14 @@ namespace SM64LockoutRace
 
         public void visualUpdate(float fTime)
         {
-            if (NetworkClient != null)
+            if (networkClient != null)
             {
-                NetworkClient.update(fTime);
-                if (NetworkClient.ErrorText != "")
+                networkClient.update(fTime);
+                if (networkClient.ErrorText != "")
                 {
+                    System.Windows.Forms.MessageBox.Show("Connection has been terminated." + networkClient.ErrorText);
                     started = false;
-                    NetworkClient = null;
-                    System.Windows.Forms.MessageBox.Show("Connection has been terminated.");
+                    networkClient = null;
                 }
             }
 
@@ -109,13 +120,13 @@ namespace SM64LockoutRace
         {
             memory.Update();
 
-            int newSaveFile = BitConverter.ToInt16(memory.ReadMemory(0x32DDF6, 2), 0);
+            int newSaveFile = BitConverter.ToInt16(memory.ReadMemory(ADDR_SAVEFILE, 2), 0);
             newSaveFile = 1;
             if (newSaveFile != saveFile)
             {
                 saveFile = newSaveFile;
                 if (started)
-                    synchronizeGame(stars);
+                    synchronizeGame(null, stars);
             }
 
             bool changed = false;
@@ -138,26 +149,26 @@ namespace SM64LockoutRace
                 if (changed)
                 {
                     stars = newStars;
-                    if (NetworkClient != null && validateState())
-                        NetworkClient.send(synchronizeGame, newStars);
+                    if (networkClient != null && validateState())
+                        networkClient.Send(synchronizeGame, newStars);
                 }
             }
             updateStarImages();
 
             if (started)
             {
-                memory.WriteMemory(0x33b218, BitConverter.GetBytes(Mode == 0 ? totalStarCount(myStars) : totalStarCount(stars)));
+                memory.WriteMemory(0x33b218, BitConverter.GetBytes(mode == 0 ? totalStarCount(myStars) : totalStarCount(stars)));
                 memory.WriteMemory(0x32DDF6, BitConverter.GetBytes((short)1));
             }
         }
 
-        public void synchronizeGameStart(byte[] newStars)
+        public void synchronizeGameStart(ClientDescription sender, byte[] newStars)
         {
             started = true;
-            synchronizeGame(newStars);
+            synchronizeGame(null, newStars);
         }
 
-        public void synchronizeGame(byte[] newStars)
+        public void synchronizeGame(ClientDescription sender, byte[] newStars)
         {
             if (newStars.Length == 0) return;
 
@@ -173,7 +184,7 @@ namespace SM64LockoutRace
                     newStars[i] &= 0x7F;
             }
 
-            if (Mode == 0)
+            if (mode == 0)
                 for (int i = 0; i < newStars.Length; i++)
                     stars[i] |= newStars[i];
             else
@@ -187,13 +198,13 @@ namespace SM64LockoutRace
 
         void UpdateStarGeoLayouts(byte[] stars)
         {
-            int geoLayoutOffset = BitConverter.ToInt32(memory.ReadMemory(0x32DDC4, 4), 0) & 0x00FFFFFF;
+            int geoLayoutOffset = BitConverter.ToInt32(memory.ReadMemory(ADDR_GEOLAYOUTOFFSET, 4), 0) & 0x00FFFFFF;
             int shadowStarLayout = BitConverter.ToInt32(memory.ReadMemory(geoLayoutOffset + 4 * 0x79, 4), 0);
             int yellowStarLayout = BitConverter.ToInt32(memory.ReadMemory(geoLayoutOffset + 4 * 0x7A, 4), 0);
             int currentNode = 0x33D488;
             int finalNode = BitConverter.ToInt32(memory.ReadMemory(currentNode + 0x4, 4), 0) & 0x00FFFFFF;
-            uint bank_0x13 = BitConverter.ToUInt32(memory.ReadMemory(0x33B400 + 0x13 * 4, 4), 0) + 0x80000000;
-            int levelID = (int)BitConverter.ToInt16(memory.ReadMemory(0x33BAC4, 2), 0) - 1;
+            uint bank_0x13 = BitConverter.ToUInt32(memory.ReadMemory(ADDR_BANKOFFSETS + 0x13 * 4, 4), 0) + 0x80000000;
+            int levelID = (int)BitConverter.ToInt16(memory.ReadMemory(ADDR_LEVELID, 2), 0) - 1;
             int levelIndex = (levelID >= 0 ? (levelID >> 2 << 2) + 3 - levelID % 4 : -1);
             int actSelectorStar = 0;
             do
@@ -246,11 +257,11 @@ namespace SM64LockoutRace
         public void reset()
         {
             byte rulesByte = (byte)((rules.sync_Keys ? 0x1 : 0) | (rules.sync_Switches ? 0x2 : 0) | (rules.sync_Cannons ? 0x4 : 0));
-            NetworkClient.send(resetInternal, new byte[] { rulesByte });
-            resetInternal(new byte[] { rulesByte });
+            networkClient.Send(resetInternal, new byte[] { rulesByte });
+            resetInternal(null, new byte[] { rulesByte });
         }
 
-        private void resetInternal(byte[] buffer)
+        private void resetInternal(ClientDescription sender, byte[] buffer)
         {
             byte rulesByte = buffer[0];
             rules.sync_Keys = (rulesByte & 0x1) > 0;
@@ -260,10 +271,10 @@ namespace SM64LockoutRace
             stars = new byte[0x70];
             stars[0x37] = 0x44;
             stars[0x36] = 0x41;
-            synchronizeGame(stars);
+            synchronizeGame(null, stars);
             myStars = (byte[])stars.Clone();
             started = true;
-            NetworkClient.started = true;
+            //NetworkClient.started = true;
         }
 
         public int totalStarCount(byte[] starArray)
@@ -387,7 +398,7 @@ namespace SM64LockoutRace
                             float d = anim.time * anim.time;
                             d = d * d * 24;
                             anim.rect = new RectangleF((7 - k) * 12 + x - d, i * 15 + y - d, 12 + d * 2, 12 + d * 2);
-                            anim.image = ((myStar & 0x80) > 0 || (this.Mode == 1 && (collectedStar & 0x80) > 0)) ? imgStar : imgLockout;
+                            anim.image = ((myStar & 0x80) > 0 || (this.mode == 1 && (collectedStar & 0x80) > 0)) ? imgStar : imgLockout;
                             animationList.Add(anim);
                         }
                         else
@@ -395,7 +406,7 @@ namespace SM64LockoutRace
                             Rectangle rect;
                             rect = new Rectangle((7 - k) * 12 + x, i * 15 + y, 12, 12);
 
-                            if ((myStar & 0x80) > 0 || (this.Mode == 1 && (collectedStar & 0x80) > 0))
+                            if ((myStar & 0x80) > 0 || (this.mode == 1 && (collectedStar & 0x80) > 0))
                                 g.DrawImage(imgStar, rect);
                             else if ((collectedStar & 0x80) > 0)
                                 g.DrawImage(imgLockout, rect);
@@ -415,12 +426,12 @@ namespace SM64LockoutRace
             transform.Scale(scale_x, scale_y);
             g.Transform = transform;
 
-            if (Mode == 0)
+            if (mode == 0)
             {
                 g.DrawString("Stars: " + totalStarCount(myStars), starFont, Brushes.White, 0, 10);
                 g.DrawString("Total: " + totalStarCount(stars), starFont, Brushes.White, 140, 10);
             }
-            else if (Mode == 1)
+            else if (mode == 1)
                 g.DrawString("Total Stars: " + totalStarCount(stars), starFont, Brushes.White, 0, 10);
             int y_offset = 40;
 
