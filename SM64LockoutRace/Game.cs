@@ -154,12 +154,6 @@ namespace GameServerUI
                 }
             }
             updateStarImages();
-
-            if (started)
-            {
-                memory.WriteMemory(0x33b218, BitConverter.GetBytes(mode == 0 ? totalStarCount(myStars) : totalStarCount(stars)));
-                memory.WriteMemory(0x32DDF6, BitConverter.GetBytes((short)1));
-            }
         }
 
         public void synchronizeGameStart(ClientDescription sender, byte[] newStars)

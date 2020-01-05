@@ -8,3 +8,4 @@ C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64Starlock
 C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\obj\x86\Debug\GameServerUI.exe
 C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\obj\x86\Debug\GameServerUI.pdb
 C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\obj\x86\Debug\GameServerUI.NetworkDialog.resources
+C:\Users\Thomas.Sharkoon7.000\Documents\Visual Studio 2010\Projects\SM64StarlockRace\GameServerUI\obj\x86\Debug\GameServer.csprojResolveAssemblyReference.cache

@@ -64,7 +64,7 @@ namespace GameServerUI
 
         private void addGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            server.CreateGame("Schnitzel");
+            server.CreateGame("Game");
         }
 
         void GameCreated(ServerBackend.Server.Game game)

@@ -25,6 +25,7 @@ namespace SM64AppBase
     public class MemorySync
     {
         private int EmulationOffset = 0;
+        bool allowReadWrite = false;
 
         public Process process = null;
         public List<ProcessEntry> availableProcesses = new List<ProcessEntry>();
@@ -32,6 +33,7 @@ namespace SM64AppBase
         private const int PROCESS_VM_OPERATION = 0x0008;
         private const int PROCESS_VM_READ = 0x0010;
         private const int PROCESS_VM_WRITE = 0x0020;
+        MagicManager mm;
 
         private class moduleoffset
         {
@@ -46,7 +48,7 @@ namespace SM64AppBase
         }
 
         private static Dictionary<moduleinfo, moduleoffset> ModuleOffsets = new Dictionary<moduleinfo, moduleoffset>();
-        private static string[] allowedProcesses = new string[] { "Project64"}; //, "mupen64-rerecording" };
+        private static string[] allowedProcesses = new string[] { "Project64" }; //, "mupen64-rerecording" };
 
         static MemorySync()
         {
@@ -107,45 +109,89 @@ namespace SM64AppBase
 
             if (process != null)
             {
-                try
-                {
-                    pID = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, process.Id);
-                    foreach (ProcessModule m in process.Modules)
-                    {
-                        foreach (KeyValuePair<moduleinfo, moduleoffset> supportedModule in ModuleOffsets)
-                            if (m.FileName.EndsWith(supportedModule.Key.name))
-                                if (supportedModule.Key.version == null || m.FileVersionInfo.FileVersion == supportedModule.Key.version)
-                                    supportedModule.Value.module = m.BaseAddress.ToInt32();
-                    }
-                    byte[] buffer = new byte[4];
-                    int bytesRead = 0;
-                    foreach (KeyValuePair<moduleinfo, moduleoffset> supportedModule in ModuleOffsets)
-                        if (supportedModule.Value.module > 0)
-                        {
-                            int offset = supportedModule.Value.module;
-                            for (int i = 0; i < supportedModule.Value.offset.Length; i++)
-                            {
-                                ReadProcessMemory((int)pID, offset + supportedModule.Value.offset[i], buffer, 4, ref bytesRead);
-                                offset = BitConverter.ToInt32(buffer, 0);
-                            }
-                            if (offset > 0)
-                            {
-                                EmulationOffset = offset;
-                                break;
-                            }
-                        }
-                }
-                catch
-                {
-                }
+                pID = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, process.Id);
+                doMagic(process);
+                //foreach (ProcessModule m in process.Modules)
+                //{
+                //    foreach (KeyValuePair<moduleinfo, moduleoffset> supportedModule in ModuleOffsets)
+                //        if (m.FileName.EndsWith(supportedModule.Key.name))
+                //            if (supportedModule.Key.version == null || m.FileVersionInfo.FileVersion == supportedModule.Key.version)
+                //                supportedModule.Value.module = m.BaseAddress.ToInt32();
+                //}
+                //byte[] buffer = new byte[4];
+                //int bytesRead = 0;
+                //foreach (KeyValuePair<moduleinfo, moduleoffset> supportedModule in ModuleOffsets)
+                //    if (supportedModule.Value.module > 0)
+                //    {
+                //        int offset = supportedModule.Value.module;
+                //        for (int i = 0; i < supportedModule.Value.offset.Length; i++)
+                //        {
+                //            ReadProcessMemory((int)pID, offset + supportedModule.Value.offset[i], buffer, 4, ref bytesRead);
+                //            offset = BitConverter.ToInt32(buffer, 0);
+                //        }
+                //        if (offset > 0)
+                //        {
+                //            EmulationOffset = offset;
+                //            break;
+                //        }
+                //    }
             }
             foreach (Process p in allProcesses)
                 p.Dispose();
+            allowReadWrite = mm != null && mm.isValid();
         }
+
+
+        public void doMagic(Process p)
+        {
+            List<int> romPtrBaseSuggestions = new List<int>();
+            List<int> ramPtrBaseSuggestions = new List<int>();
+
+            DeepPointer[] ramPtrBaseSuggestionsDPtrs = { new DeepPointer("Project64.exe", 0xD6A1C),     //1.6
+                    new DeepPointer("RSP 1.7.dll", 0x4C054), new DeepPointer("RSP 1.7.dll", 0x44B5C)        //2.3.2; 2.4
+                };
+
+            DeepPointer[] romPtrBaseSuggestionsDPtrs = { new DeepPointer("Project64.exe", 0xD6A2C),     //1.6
+                    new DeepPointer("RSP 1.7.dll", 0x4C050), new DeepPointer("RSP 1.7.dll", 0x44B58)        //2.3.2; 2.4
+                };
+
+            // Time to generate some addesses for magic check
+            foreach (DeepPointer romSuggestionPtr in romPtrBaseSuggestionsDPtrs)
+            {
+                int ptr = -1;
+                try
+                {
+                    romSuggestionPtr.DerefInt(p, out ptr);
+                    romPtrBaseSuggestions.Add(ptr);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
+
+            foreach (DeepPointer ramSuggestionPtr in ramPtrBaseSuggestionsDPtrs)
+            {
+                int ptr = -1;
+                try
+                {
+                    ramSuggestionPtr.DerefInt(p, out ptr);
+                    ramPtrBaseSuggestions.Add(ptr);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
+
+            mm = new MagicManager(p, romPtrBaseSuggestions.ToArray(), ramPtrBaseSuggestions.ToArray());
+            EmulationOffset = mm.ramPtrBase;
+        }
+
 
         public byte[] ReadMemory(int lpBaseAddress, int count)
         {
-            if (process == null)
+            if (process == null || !allowReadWrite)
                 return new byte[count];
             byte[] buffer = new byte[count];
             int bytesRead = 0;
@@ -155,7 +201,7 @@ namespace SM64AppBase
 
         public void WriteMemory(int lpBaseAddress, byte[] buffer)
         {
-            if (process == null) return;
+            if (process == null || !allowReadWrite) return;
             int bytesWritten = 0;
             WriteProcessMemory((int)pID, lpBaseAddress + EmulationOffset, buffer, buffer.Length, ref bytesWritten);
         }

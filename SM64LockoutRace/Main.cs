@@ -134,9 +134,7 @@ namespace GameServerUI
             btnStart.Enabled = (game.networkClient != null && (game.mode == 1 || game.networkClient.connectedClients > 1) && !game.started);
             if (game.networkClient == null)
             {
-                btnHost.Text = "Host";
                 btnConnect.Text = "Connect";
-                btnHost.Enabled = true;
                 btnConnect.Enabled = true;
             }
             foreach (ProcessEntry p in game.memory.availableProcesses)
@@ -201,7 +199,6 @@ namespace GameServerUI
                     return;
                 }
                 game.Connect();
-                btnHost.Enabled = false;
                 btnConnect.Enabled = false;
                 btnStart.Enabled = true;
                 btnConnect.Text = "Connected";

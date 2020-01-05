@@ -136,7 +136,7 @@ namespace ServerBackend
             SetServerCallback(1, SetGame);
             try
             {
-                server = new TcpListener(LocalIPAddresses()[0], port);
+                server = new TcpListener(IPAddress.Any, port);
                 listenerProcess = new BackgroundWorker();
                 listenerProcess.DoWork += serverListen;
                 listenerProcess.RunWorkerAsync();

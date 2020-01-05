@@ -82,12 +82,12 @@
             this.contextGames.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addGameToolStripMenuItem});
             this.contextGames.Name = "contextGames";
-            this.contextGames.Size = new System.Drawing.Size(153, 48);
+            this.contextGames.Size = new System.Drawing.Size(131, 26);
             // 
             // addGameToolStripMenuItem
             // 
             this.addGameToolStripMenuItem.Name = "addGameToolStripMenuItem";
-            this.addGameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.addGameToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.addGameToolStripMenuItem.Text = "Add Game";
             this.addGameToolStripMenuItem.Click += new System.EventHandler(this.addGameToolStripMenuItem_Click);
             // 

@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.btnConnect = new System.Windows.Forms.Button();
             this.pnGraphics = new System.Windows.Forms.Panel();
-            this.btnHost = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
             this.cmbProcess = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -44,9 +43,9 @@
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(84, 3);
+            this.btnConnect.Location = new System.Drawing.Point(3, 3);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(75, 23);
+            this.btnConnect.Size = new System.Drawing.Size(156, 23);
             this.btnConnect.TabIndex = 0;
             this.btnConnect.Text = "Connect";
             this.btnConnect.UseVisualStyleBackColor = true;
@@ -62,16 +61,6 @@
             this.pnGraphics.Size = new System.Drawing.Size(248, 280);
             this.pnGraphics.TabIndex = 1;
             this.pnGraphics.Click += new System.EventHandler(this.pnGraphics_Click);
-            // 
-            // btnHost
-            // 
-            this.btnHost.Location = new System.Drawing.Point(3, 3);
-            this.btnHost.Name = "btnHost";
-            this.btnHost.Size = new System.Drawing.Size(75, 23);
-            this.btnHost.TabIndex = 0;
-            this.btnHost.Text = "Host";
-            this.btnHost.UseVisualStyleBackColor = true;
-            this.btnHost.Click += new System.EventHandler(this.btnHost_Click);
             // 
             // btnStart
             // 
@@ -101,7 +90,6 @@
             this.panel1.AutoScroll = true;
             this.panel1.AutoSize = true;
             this.panel1.Controls.Add(this.cmbProcess);
-            this.panel1.Controls.Add(this.btnHost);
             this.panel1.Controls.Add(this.btnConnect);
             this.panel1.Controls.Add(this.btnStart);
             this.panel1.Location = new System.Drawing.Point(10, 5);
@@ -148,7 +136,6 @@
 
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.Panel pnGraphics;
-        private System.Windows.Forms.Button btnHost;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.ComboBox cmbProcess;
         private System.Windows.Forms.Panel panel1;
